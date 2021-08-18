@@ -1,0 +1,32 @@
+1st Approach
+(Binary Search) [O(log(n))]
+
+1. Go to locker sections (1 section = 15 lockers) (30 sections = 450 lockers)
+2. Go to middle of locker sections
+3. Look at locker numbers
+4. If 88 is on current section
+5.	Call Found
+6. Else if 88 is smaller than numbers in locker sections
+7.	Go to middle of left half of locker sections
+8.	Go back to line 3
+9. Else if 88 is larger than number in locker sections
+10.	Go to middle of right half of locker sections 
+11.	Go back to line 3
+12. Else
+13.	End
+
+2nd Approach
+(Linear Search) [O(n)]
+
+1. Go to locker sections (1 section = 15 lockers) (30 sections = 450 lockers)
+2. Go to first section
+3. Look at locker numbers
+4. If 88 is on current section
+5.	Call Found
+6. Else if 88 is not on current section
+7.	Go to next section
+8.	Go back to line 3
+9. Else
+10.	End
+
+
