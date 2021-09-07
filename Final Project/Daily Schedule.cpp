@@ -42,7 +42,7 @@ int main() {
       
     		case 1:{
 	    		show();
-      		break;
+      			break;
 				}
       
 			case 2:{
@@ -62,10 +62,10 @@ int main() {
 			case 5:{
 				search();
 				break;
-      }
-      case 6:{
-        break();
-      }
+      		}
+      		case 6:{
+        		break;
+      		}
     }
   	}	while(choice != 7);
 }
