@@ -18,7 +18,6 @@ int binary(struct Days ds[], int x, int target);
 void split(struct Days dy[], int left, int right, int ch);
 void sort(struct Days dy[], int x, int ch);
 void merge(struct Days dy[], int left, int mid, int right, int ch);
-void title(FILE *fpp);
 void time();
 
 // ==========================================
@@ -26,8 +25,8 @@ void time();
 // ==========================================
 
 struct Days{
-	long long int hours;
-	char action[50];	
+	double hours; // Stores the time of schedule
+	char action[50]; // Stores the activity at the current schedule
 };
 
 // =============
@@ -38,17 +37,19 @@ int main() {
 
 	int choice;
 	
-	char string[100000];
-    
-    FILE *art = fopen("ascii.txt", "r");
-
-    while(fscanf(art, "%[^\n]\n", string) != EOF){
-        printf("%s\n", string);
-    }
-
-    fclose(art);
-        
 	do{
+    
+    char string[100000];
+	
+	
+		FILE *art = fopen("ascii.txt", "r"); // Open ascii art file
+	
+		while(fscanf(art, "%[^\n]\n", string) != EOF){
+			printf("%s\n", string); // Displays ascii art
+		}
+	
+		fclose(art);
+    
 		menu(); // Shows menu
     	scanf("%d", &choice);
     	system("@cls||clear");
@@ -56,33 +57,31 @@ int main() {
 		switch (choice){
       
     		case 1:{
-	    		show();
+	    		show(); // Shows all existing schedules
       			break;
 				}
       
 			case 2:{
-	        	add();
+	        	add(); // Adds a schedule
           		break;
 	      	}
 	
         	case 3:{
-      			edit();
+      			edit(); // Edits a schedule
       			break;
 			}
       
        		case 4:{
-      			remove();
+      			remove(); // Removes a schedule
      	 		break;
 			}
 			case 5:{
-				search();
+				search(); // Search a specific schedule with the time
 				break;
       		}
-      		case 6:{
-        		break;
-      		}
-    }
-  	}	while(choice != 7);
+    	}
+  	}	
+	while(choice != 6);
 }
 
 // =================================================
@@ -91,23 +90,23 @@ int main() {
 
 void menu(){
 		
-	printf("_____________________________________\n");
-	printf("| 1.| Show all schedules             |\n");
-	printf("|---|--------------------------------|\n");
-	printf("| 2.| Add schedule                   |\n");
-	printf("|---|--------------------------------|\n");
-	printf("| 3.| Edit schedule                  |\n");
-	printf("|---|--------------------------------|\n");
-	printf("| 4.| Remove schedule                |\n");
-	printf("|---|--------------------------------|\n");
-	printf("| 5.| Search specific schedule time  |\n");
-	printf("|---|--------------------------------|\n");
-	printf("| 6.| Exit                           |\n");
-	printf("======================================\n");
-	puts("");
-	time();
-	puts("");
-	printf("Choose a number of the feature: ");
+		printf("_____________________________________\n");
+		printf("| 1.| Show all schedules             |\n");
+		printf("|---|--------------------------------|\n");
+		printf("| 2.| Add schedule                   |\n");
+		printf("|---|--------------------------------|\n");
+		printf("| 3.| Edit schedule                  |\n");
+		printf("|---|--------------------------------|\n");
+		printf("| 4.| Remove schedule                |\n");
+		printf("|---|--------------------------------|\n");
+		printf("| 5.| Search specific schedule time  |\n");
+		printf("|---|--------------------------------|\n");
+		printf("| 6.| Exit                           |\n");
+		printf("======================================\n");
+    puts("");
+    time(); // Displays current date and time
+    puts("");
+    printf("Choose a number of the feature: ");
 		
 
 }
@@ -142,13 +141,11 @@ void show(){
 	
 	system("@cls||clear");
 	
-	FILE *f1 = fopen("monday.txt", "r");
+	FILE *f1 = fopen("week/monday.txt", "r");
+	printf("===============================\n");
 	printf("Monday's Schedule :\n");
-	
-	while(fscanf(f1, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action); // converting time (from 1835 to 18.35)
+	while(fscanf(f1, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+    printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on monday
 		c++;
 		count++;
 	}
@@ -157,13 +154,12 @@ void show(){
 	count = 1;
     fclose(f1);
     
-    FILE *f2 = fopen("tuesday.txt", "r");
+    FILE *f2 = fopen("week/tuesday.txt", "r");
+    printf("____________________\n");
 	printf("Tuesday's Schedule :\n");
-	while(fscanf(f2, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
-		c++;
+	while(fscanf(f2, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on tuesday
+    c++;
 		count++;
 	}
 	
@@ -171,12 +167,11 @@ void show(){
 	count = 1;
     fclose(f2);
     
-    FILE *f3 = fopen("wednesday.txt", "r");
+    FILE *f3 = fopen("week/wednesday.txt", "r");
+    printf("______________________\n");
 	printf("Wednesday's Schedule :\n");
-	while(fscanf(f3, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+	while(fscanf(f3, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on wednesday
 		c++;
 		count++;
 	}
@@ -184,12 +179,11 @@ void show(){
 	count = 1;
     fclose(f3);
     
-    FILE *f4 = fopen("thursday.txt", "r");
+    FILE *f4 = fopen("week/thursday.txt", "r");
+    printf("_____________________\n");
 	printf("Thursday's Schedule :\n");
-	while(fscanf(f4, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+	while(fscanf(f4, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on thursday
 		c++;
 		count++;
 	}
@@ -198,12 +192,11 @@ void show(){
 	count = 1;
     fclose(f4);
     
-    FILE *f5 = fopen("friday.txt", "r");
+    FILE *f5 = fopen("week/friday.txt", "r");
+    printf("___________________\n");
 	printf("Friday's Schedule :\n");
-	while(fscanf(f5, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+	while(fscanf(f5, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on friday
 		c++;
 		count++;
 	}
@@ -212,12 +205,11 @@ void show(){
 	count = 1;
     fclose(f5);
     
-    FILE *f6 = fopen("saturday.txt", "r");
+    FILE *f6 = fopen("week/saturday.txt", "r");
+    printf("_____________________\n");
 	printf("Saturday's Schedule :\n");
-	while(fscanf(f6, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+	while(fscanf(f6, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on saturday
 		c++;
 		count++;
 	}
@@ -226,24 +218,24 @@ void show(){
 	count = 1;
     fclose(f6);
     
-	FILE *f7 = fopen("sunday.txt", "r");
+	FILE *f7 = fopen("week/sunday.txt", "r");
+	printf("___________________\n");
 	printf("Sunday's Schedule :\n");
-	while(fscanf(f7, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
-		double hour = dy[c].hours / 100;
-		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+	while(fscanf(f7, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+		printf("%d. %.2f %s\n", count, dy[c].hours, dy[c].action); // Displays all schedule on sunday
 		c++;
 		count++;
 	}
 	
+	
   	printf("\n");
+  	printf("===============================\n");
 	count = 1;
     fclose(f7);
     
-    char key;
     printf("Press Enter key to continue!\n");
     while(getchar()!='\n');
-    getchar();
+    getchar(); // Recieves the enter key from stdin
     system("@cls||clear");
 }
 
@@ -260,7 +252,7 @@ void add(){
 	  	int choose;
 	    week();
 	    printf("Which day would you like to choose? (Number)\n");
-		scanf("%d", &choose);
+		scanf("%d", &choose); // Inputs user's chosen day
 		system("@cls||clear");
     
     FILE *fadd;
@@ -269,74 +261,75 @@ void add(){
     	fadd = fopen("week/monday.txt", "a");
 	}
 	else if(choose == 2){
-		fadd = fopen("tuesday.txt", "a");
+		fadd = fopen("week/tuesday.txt", "a");
 	}
 	else if(choose == 3){
-		fadd = fopen("wednesday.txt", "a");
+		fadd = fopen("week/wednesday.txt", "a");
 	}
 	else if(choose == 4){
-		fadd = fopen("thursday.txt", "a");
+		fadd = fopen("week/thursday.txt", "a");
 	}
 	else if(choose == 5){
-		fadd = fopen("friday.txt", "a");
+		fadd = fopen("week/friday.txt", "a");
 	}
 	else if(choose == 6){
-		fadd = fopen("saturday.txt", "a");
+		fadd = fopen("week/saturday.txt", "a");
 	}
 	else if(choose == 7){
-		fadd = fopen("sunday.txt", "a");
+		fadd = fopen("week/sunday.txt", "a");
 	}
 	else{
       	printf("Invalid input\n");
 		add();
 	}
     	int chs = choose;
-      	puts("What time? (ex: 1835 = 6 past 35 PM)");
-		scanf("%lld", &ds.hours);
-		system("@cls||clear"); // Clears previous question
-      
+      	puts("What time? (ex: 6.35 = 6 past 35 AM, 18.35 = 6 past 35 PM)");
+		scanf("%lf", &ds.hours); // Inputs user's activity time
+      	
+      	puts("");
+      	
 	  	puts("What to do? (ex: study)");
 	  	getchar();
-    	scanf("%[^\n]", &ds.action);
-    	system("@cls||clear"); // Clears previous question
+    	scanf("%[^\n]", &ds.action); // Inputs user's activity
+    	system("@cls||clear");
     	
-      	fprintf(fadd,"%lld %s\n", ds.hours, ds.action); 
+      	fprintf(fadd,"%lf %s\n", ds.hours, ds.action); // Appends user's previous inputs to file
       	fclose(fadd);
     
     FILE *fadd1;
     
     if(choose == 1){
-			fadd1 = fopen("monday.txt", "a+");
+			fadd1 = fopen("week/monday.txt", "a+");
 	}
     else if(choose == 2){
-			fadd1 = fopen("tuesday.txt", "a+");
+			fadd1 = fopen("week/tuesday.txt", "a+");
 	}
     else if(choose == 3){
-			fadd1 = fopen("wednesday.txt", "a+");
+			fadd1 = fopen("week/wednesday.txt", "a+");
 	}
     else if(choose == 4){
-			fadd1 = fopen("thursday.txt", "a+");
+			fadd1 = fopen("week/thursday.txt", "a+");
 	}
     else if(choose == 5){
-			fadd1 = fopen("friday.txt", "a+");
+			fadd1 = fopen("week/friday.txt", "a+");
 	}
     else if(choose == 6){
-			fadd1 = fopen("saturday.txt", "a+");
+			fadd1 = fopen("week/saturday.txt", "a+");
 	}
     else if(choose == 7){
-			fadd1 = fopen("sunday.txt", "a+");
+			fadd1 = fopen("week/sunday.txt", "a+");
 	}
 	else{
       	printf("Invalid input\n");
 		add();
 	}
 	
-      while(fscanf(fadd1, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+      while(fscanf(fadd1, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
         c++;
       }
       
       if (c > 1){
-        sort(dy, c, chs);
+        sort(dy, c, chs); // Sorts the schedule's time from early to late
       }
       
       else{
@@ -344,7 +337,9 @@ void add(){
       }
       
       fclose(fadd1);
-
+		
+		puts("");
+		
         puts("Would you like to add again? (YES or NO) (ALL CAPS)");
     	
     	char jwb[10];
@@ -358,7 +353,7 @@ void add(){
     		add();
 		}
 		else if (strcmp(jwb, n) == 0){
-			main();
+			break;
 		}
 		else{
 			puts("Invalid input");
@@ -380,8 +375,8 @@ void edit(){
   while(1){
 
     week();
-    printf("Which day would you like to choose? (Number)\n");
-    scanf("%d", &choose);
+    printf("Which day would you like to choose? (Number)\n"); 
+    scanf("%d", &choose); // Inputs user's chosen day
     system("@cls||clear");
     
    	int chs = choose;
@@ -396,58 +391,60 @@ void edit(){
     FILE *fp;
     
     if(choose == 1){
-    	fp = fopen("./monday.txt", "r");
+    	fp = fopen("week/monday.txt", "r");
 	}
 
 	else if(choose == 2){
-    	fp = fopen("./tuesday.txt", "r+");
+    	fp = fopen("week/tuesday.txt", "r+");
 	}
 	
 	else if(choose == 3){
-    	fp = fopen("./wednesday.txt", "r+");
+    	fp = fopen("week/wednesday.txt", "r+");
 	}
 	
 	else if(choose == 4){
-    	fp = fopen("./thursday.txt", "r+");
+    	fp = fopen("week/thursday.txt", "r+");
 	}
 	
 	else if(choose == 5){
-    	fp = fopen("./friday.txt", "r+");
+    	fp = fopen("week/friday.txt", "r+");
 	}
 	
 	else if(choose == 6){
-    	fp = fopen("./saturday.txt", "r+");
+    	fp = fopen("week/saturday.txt", "r+");
 	}
 	
 	else if(choose == 7){
-    	fp = fopen("./sunday.txt", "r+");
+    	fp = fopen("week/sunday.txt", "r+");
 	}
 	
       
-	while(fscanf(fp, "%lld %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){
-    	printf("%d. %lld %s\n", c, ds[counter].hours, ds[counter].action);
+	while(fscanf(fp, "%lf %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){ // Getting all schedules from txt file (each schedule is within a single line)
+    	printf("%d. %.2f %s\n", c, ds[counter].hours, ds[counter].action); // Shows all current schedules within the chosen day
     	counter++;
     	c++;
 		}
       
     puts("Which schedule would you like to change? (Insert schedule number)");
-  	scanf("%d", &lin);
+  	scanf("%d", &lin); // Inputs user's choice of schedule to be changed
   	system("@cls||clear");
   	
       
-	puts("What time? (ex: 1835 = 6 past 35 PM)");
-	scanf("%lld", &tmp.hours);
-	system("@cls||clear");
-      
+	puts("What time? (ex: 6.35 = 6 past 35 AM, 18.35 = 6 past 35 PM)");
+	scanf("%lf", &tmp.hours); // Inputs user's updated activity time
+    
+    puts("");
+    
 	puts("What to do? (ex: study)");
-	getchar();
-	scanf("%[^\n]", &tmp.action);
-	system("@cls||clear");
+	getchar(); 
+	scanf("%[^\n]", &tmp.action); // Inputs user's updated activity
+	
+	puts("");
     
     while(1){
         char cnm[10];
-        puts("Are you sure you want to update? (YES OR NO) (ALL CAPS)");
-        scanf("%s", &cnm);
+        puts("Are you sure you want to update? (YES OR NO) (ALL CAPS)"); // Confirms user's changes within the schedule
+        scanf("%s", &cnm); // Inputs user's confirmation
         system("@cls||clear");
     	int len = strlen(cnm);
 		bool ans = (len % 2 == 0);
@@ -465,43 +462,45 @@ void edit(){
 		}
 	}
     
+    puts("Here is your new schedule :\n"); // Displays updated schedule
+    
     FILE *fc;
     
     if(choose == 1){
-    	fc = fopen("./monday.txt", "w+");
+    	fc = fopen("week/monday.txt", "w+");
 	}
 
 	else if(choose == 2){
-    	fc = fopen("./tuesday.txt", "w+");
+    	fc = fopen("week/tuesday.txt", "w+");
 	}
 	
 	else if(choose == 3){
-    	fc = fopen("./wednesday.txt", "w+");
+    	fc = fopen("week/wednesday.txt", "w+");
 	}
 	
 	else if(choose == 4){
-    	fc = fopen("./thursday.txt", "w+");
+    	fc = fopen("week/thursday.txt", "w+");
 	}
 	
 	else if(choose == 5){
-    	fc = fopen("./friday.txt", "w+");
+    	fc = fopen("week/friday.txt", "w+");
 	}
 	
 	else if(choose == 6){
-    	fc = fopen("./saturday.txt", "w+");
+    	fc = fopen("week/saturday.txt", "w+");
 	}
 	
 	else if(choose == 7){
-    	fc = fopen("./sunday.txt", "w+");
+    	fc = fopen("week/sunday.txt", "w+");
 	}
 	
    	for (int i = 1; i <= counter; i++){
         if (i == lin){
-            fprintf(fc, "%lld %s\n", tmp.hours, tmp.action);
+            fprintf(fc, "%lf %s\n", tmp.hours, tmp.action);
             c1++;
         }
         else{
-            fprintf(fc, "%lld %s\n", ds[i-1].hours, ds[i-1].action);
+            fprintf(fc, "%lf %s\n", ds[i-1].hours, ds[i-1].action);
             c1++;
         }
     }
@@ -509,50 +508,71 @@ void edit(){
 	fclose(fc);
         
     FILE *fa;
+    FILE *ff;
 
     if(choose == 1){
-    	fa = fopen("./monday.txt", "a+");
+    	fa = fopen("week/monday.txt", "a+");
+    	ff = fopen("week/monday.txt", "r");
 	}
 	
 	else if(choose == 2){
-    	fa = fopen("./tuesday.txt", "a+");
+    	fa = fopen("week/tuesday.txt", "a+");
+    	ff = fopen("week/tuesday.txt", "r");
 	}
 	
 	else if(choose == 3){
-    	fa = fopen("./wednesday.txt", "a+");
+    	fa = fopen("week/wednesday.txt", "a+");
+    	ff = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 4){
-    	fa = fopen("./thursday.txt", "a+");
+    	fa = fopen("week/thursday.txt", "a+");
+    	ff = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 5){
-    	fa = fopen("./friday.txt", "a+");
+    	fa = fopen("week/friday.txt", "a+");
+    	ff = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 6){
-    	fa = fopen("./saturday.txt", "a+");
+    	fa = fopen("week/saturday.txt", "a+");
+    	ff = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 7){
-    	fa = fopen("./sunday.txt", "a+");
+    	fa = fopen("week/sunday.txt", "a+");
+    	ff = fopen("week/wednesday.txt", "r");
 	}
         
       	int count = 0;
-      	while(fscanf(fa, "%lld %[^\n]\n", &dy[count].hours, dy[count].action) != EOF){
+      	while(fscanf(fa, "%lf %[^\n]\n", &dy[count].hours, dy[count].action) != EOF){
         count++;
     	  }
       
      		if (count > 1){
-        	sort(dy, count, chs);
+        	sort(dy, count, chs); // Sorts the updated schedule's time from early to late
       	}
       
       	else{
         	fclose(fa);
       	}
-      
+      	
+      	int stuff = 0;
+      	int c2 = 1;
+      	
+      	
+      	while(fscanf(ff, "%lf %[^\n]\n", &dy[stuff].hours, dy[stuff].action) != EOF){
+      		printf("%d. %.2f %s\n", c2, dy[stuff].hours, dy[stuff].action); // Displays updated schedule
+        	stuff++;
+        	c2++;
+      	}
+      	
+      	fclose(ff);
       	fclose(fa);
-      
+      	
+      	puts("");
+      	
         puts("Would you like to edit again? (YES or NO) (ALL CAPS)");
     	
     	char jwb[10];
@@ -566,7 +586,7 @@ void edit(){
     		edit();
 		}
 		else if (strcmp(jwb, n) == 0){
-			main();
+			break;
 		}
 		else{
 			puts("Invalid input");
@@ -586,36 +606,36 @@ void remove(){
   while(1){
     week();
     printf("Which day would you like to choose? (Number)\n");
-    scanf("%d", &choose);
+    scanf("%d", &choose); // Inputs user's chosen day
     system("@cls||clear");
     
     FILE *fp;
     
     if(choose == 1){
-    	fp = fopen("./monday.txt", "r");
+    	fp = fopen("week/monday.txt", "r");
 	}
 	else if(choose == 2){
-    	fp = fopen("./tuesday.txt", "r");
+    	fp = fopen("week/tuesday.txt", "r");
 	}
 	
 	else if(choose == 3){
-    	fp = fopen("./wednesday.txt", "r");
+    	fp = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 4){
-    	fp = fopen("./thursday.txt", "r");
+    	fp = fopen("week/thursday.txt", "r");
 	}
 	
 	else if(choose == 5){
-    	fp = fopen("./friday.txt", "r");
+    	fp = fopen("week/friday.txt", "r");
 	}
 	
 	else if(choose == 6){
-    	fp = fopen("./saturday.txt", "r");
+    	fp = fopen("week/saturday.txt", "r");
 	}
 	
 	else if(choose == 7){
-    	fp = fopen("./sunday.txt", "r");
+    	fp = fopen("week/sunday.txt", "r");
 	}
 	
   	int c1 = 1;
@@ -627,20 +647,21 @@ void remove(){
   	struct Days ds[50];
   	struct Days tmp;
   	
-	while(fscanf(fp, "%lld %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){
-    	printf("%d. %lld %s\n", c, ds[counter].hours, ds[counter].action);
+	while(fscanf(fp, "%lf %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){ // Getting all schedules from txt file (each schedule is within a single line)
+    	printf("%d. %.2f %s\n", c, ds[counter].hours, ds[counter].action); // Shows all current schedules within the chosen day
     	counter++;
     	c++;
 	}
   
     puts("Which schedule would you like to remove? (Insert schedule number)");
-    scanf("%d", &lin);
-    system("@cls||clear");
-        
+    scanf("%d", &lin); // Inputs user's choice of schedule to be removed
+    
+    puts("");
+    
     while(1){
         char cnm[10];
-        puts("Are you sure you want to remove? (YES OR NO) (ALL CAPS)");
-        scanf("%s", &cnm);
+        puts("Are you sure you want to remove? (YES OR NO) (ALL CAPS)"); // Confirms user's changes within the schedule
+        scanf("%s", &cnm); // Inputs user's confirmation
         system("@cls||clear");
     	int len = strlen(cnm);
 		bool ans = (len % 2 == 0);
@@ -658,35 +679,35 @@ void remove(){
 		}
 	}
         
-    puts("Here is your new schedule :\n");
+    puts("Here is your new schedule :\n"); // Displays updated schedule
     
     FILE *fc;
     
     if(choose == 1){
-    	fc = fopen("./monday.txt", "w+");
+    	fc = fopen("week/monday.txt", "w+");
 	}
 	else if(choose == 2){
-    	fc = fopen("./tuesday.txt", "w+");
+    	fc = fopen("week/tuesday.txt", "w+");
 	}
 	
 	else if(choose == 3){
-    	fc = fopen("./wednesday.txt", "w+");
+    	fc = fopen("week/wednesday.txt", "w+");
 	}
 	
 	else if(choose == 4){
-    	fc = fopen("./thursday.txt", "w+");
+    	fc = fopen("week/thursday.txt", "w+");
 	}
 	
 	else if(choose == 5){
-    	fc = fopen("./friday.txt", "w+");
+    	fc = fopen("week/friday.txt", "w+");
 	}
 	
 	else if(choose == 6){
-    	fc = fopen("./saturday.txt", "w+");
+    	fc = fopen("week/saturday.txt", "w+");
 	}
 	
 	else if(choose == 7){
-    	fc = fopen("./sunday.txt", "w+");
+    	fc = fopen("week/sunday.txt", "w+");
 	}
 
 	for (int i = 1; i <= counter; i++){
@@ -694,8 +715,8 @@ void remove(){
            continue;
         }
         else{
-            fprintf(fc, "%lld %s\n", ds[i-1].hours, ds[i-1].action);
-            printf("%d. %lld %s\n", c1, ds[i-1].hours, ds[i-1].action);
+            fprintf(fc, "%lf %s\n", ds[i-1].hours, ds[i-1].action); // Writes updated schedule to file
+            printf("%d. %.2f %s\n", c1, ds[i-1].hours, ds[i-1].action); // Displays updated schedule
             c1++;
         }
         }
@@ -717,7 +738,7 @@ void remove(){
     		remove();
 		}
 		else if (strcmp(jwb, n) == 0){
-			main();
+			break;
 		}
 		else{
 			puts("Invalid input");
@@ -732,61 +753,64 @@ void remove(){
 // =============================================
 
 void search(){
-	long long int num;
+  int trg;
+	double num;
 
 	puts("What time would you like to search in the schedule? (ex: 1835 = 6 past 35 PM)");
-	scanf("%lld", &num);
+	scanf("%lf", &num); // Inputs a specific time of schedule to be searched
 	system("@cls||clear");
+  
+  	trg = num*100;
 	
 	int choose;
 	week();
     printf("Which day would you like to choose? (Number)\n");
-    scanf("%d", &choose);
+    scanf("%d", &choose); // Inputs user's chosen day
     system("@cls||clear");
     
     FILE *fp;
     
     if(choose == 1){
-    	fp = fopen("./monday.txt", "r");
+    	fp = fopen("week/monday.txt", "r");
 	}
 	else if(choose == 2){
-    	fp = fopen("./tuesday.txt", "r");
+    	fp = fopen("week/tuesday.txt", "r");
 	}
 	
 	else if(choose == 3){
-    	fp = fopen("./wednesday.txt", "r");
+    	fp = fopen("week/wednesday.txt", "r");
 	}
 	
 	else if(choose == 4){
-    	fp = fopen("./thursday.txt", "r");
+    	fp = fopen("week/thursday.txt", "r");
 	}
 	
 	else if(choose == 5){
-    	fp = fopen("./friday.txt", "r");
+    	fp = fopen("week/friday.txt", "r");
 	}
 	
 	else if(choose == 6){
-    	fp = fopen("./saturday.txt", "r");
+    	fp = fopen("week/saturday.txt", "r");
 	}
 	
 	else if(choose == 7){
-    	fp = fopen("./sunday.txt", "r");
+    	fp = fopen("week/sunday.txt", "r");
 	}
     
     int c = 1;
     int counter = 0;
     struct Days ds[50];
     
-    while(fscanf(fp, "%lld %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){
+    while(fscanf(fp, "%lf %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){ // Getting all schedules from txt file (each schedule is within a single line)
     	counter++;
     	c++;
 	}
 	
-	binary(ds, c, num);
+	binary(ds, c, trg); // Binary Search System
     
-    int idx = binary(ds, c, num);
+    int idx = binary(ds, c, trg);
     
-    if (binary(ds, c, num) == -1){
+    if (binary(ds, c, trg) == -1){ // Condition if there is no match
     	puts("No schedule at this time in this day\n");
     	puts("Would you like to search again? (YES or NO) (ALL CAPS)");
     	
@@ -801,16 +825,19 @@ void search(){
     		search();
 		}
 		else if (strcmp(jwb, n) == 0){
-			main();
 		}
 		else{
 			puts("Invalid input");
 		}
 	}
 	
-	else{
+	else{ // Condition if there is a match
 	    puts("Here is the schedule:");
+	    puts("");
 	    printf("%s\n", ds[idx].action);
+	    
+	    puts("");
+	    
     	puts("Would you like to search again? (YES or NO) (ALL CAPS)");
     	
     	char jwb[10];
@@ -842,13 +869,13 @@ int binary(struct Days ds[50], int x, int target){
 	while(min <= max){
 		int mid = (min + max) / 2;
 		
-		if (target < ds[mid].hours){
+		if (target < (ds[mid].hours*100)){
 			max = mid - 1;
 		}
-		else if (target > ds[mid].hours){
+		else if (target > (ds[mid].hours*100)){
 			min = mid + 1;
 		}
-		else{
+		else if (target == (ds[mid].hours*100)){
 			return mid;
 		}
 	}
@@ -887,30 +914,30 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
 	FILE *fm;
 	
 	if (ch == 1){
-		fm = fopen("monday.txt", "r");
+		fm = fopen("week/monday.txt", "r");
 	}
 	else if (ch == 2){
-		fm = fopen("tuesday.txt", "r");
+		fm = fopen("week/tuesday.txt", "r");
 	}
 	else if (ch == 3){
-		fm = fopen("wednesday.txt", "r");
+		fm = fopen("week/wednesday.txt", "r");
 	}
 	else if (ch == 4){
-		fm = fopen("thursday.txt", "r");
+		fm = fopen("week/thursday.txt", "r");
 	}
 	else if (ch == 5){
-		fm = fopen("friday.txt", "r");
+		fm = fopen("week/friday.txt", "r");
 	}
 	else if (ch == 6){
-		fm = fopen("saturday.txt", "r");
+		fm = fopen("week/saturday.txt", "r");
 	}
 	else if (ch == 7){
-		fm = fopen("sunday.txt", "r");
+		fm = fopen("week/sunday.txt", "r");
 	}
 	
 	int count = 0;
 	
-	while(fscanf(fm, "%d %[^\n]\n", &dy[count].hours, dy[count].action) != EOF){
+	while(fscanf(fm, "%lf %[^\n]\n", &dy[count].hours, dy[count].action) != EOF){
     	count++;
     }
 	
@@ -960,33 +987,32 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
     FILE *fs;
     
 	if (ch == 1){
-		fs = fopen("monday.txt", "w+");
+		fs = fopen("week/monday.txt", "w+");
 	}
 	else if (ch == 2){
-		fs = fopen("tuesday.txt", "w+");
+		fs = fopen("week/tuesday.txt", "w+");
 	}
 	else if (ch == 3){
-		fs = fopen("wednesday.txt", "w+");
+		fs = fopen("week/wednesday.txt", "w+");
 	}
 	else if (ch == 4){
-		fs = fopen("thursday.txt", "w+");
+		fs = fopen("week/thursday.txt", "w+");
 	}
 	else if (ch == 5){
-		fs = fopen("friday.txt", "w+");
+		fs = fopen("week/friday.txt", "w+");
 	}
 	else if (ch == 6){
-		fs = fopen("saturday.txt", "w+");
+		fs = fopen("week/saturday.txt", "w+");
 	}
 	else if (ch == 7){
-		fs = fopen("sunday.txt", "w+");
+		fs = fopen("week/sunday.txt", "w+");
 	}
 	
 	for (int k = 0; k < count; k++){
-		fprintf(fs, "%d %s\n", dy[k].hours, dy[k].action);
+		fprintf(fs, "%lf %s\n", dy[k].hours, dy[k].action);
 	}
 	fclose(fs);
 	fclose(fm);
-	
 }
 
 void time(){
