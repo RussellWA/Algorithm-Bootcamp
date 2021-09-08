@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 // =========
 // FUNCTIONS
@@ -16,14 +18,16 @@ int binary(struct Days ds[], int x, int target);
 void split(struct Days dy[], int left, int right, int ch);
 void sort(struct Days dy[], int x, int ch);
 void merge(struct Days dy[], int left, int mid, int right, int ch);
+void title(FILE *fpp);
+void time();
 
 // ==========================================
 // STRUCT (PLACEHOLDER FOR HOURS AND ACTIONS)
 // ==========================================
 
 struct Days{
-			long long int hours;
-			char action[50];	
+	long long int hours;
+	char action[50];	
 };
 
 // =============
@@ -33,10 +37,21 @@ struct Days{
 int main() {	
 
 	int choice;
+	
+	char string[100000];
+    
+    FILE *art = fopen("ascii.txt", "r");
 
+    while(fscanf(art, "%[^\n]\n", string) != EOF){
+        printf("%s\n", string);
+    }
+
+    fclose(art);
+        
 	do{
 		menu(); // Shows menu
     	scanf("%d", &choice);
+    	system("@cls||clear");
 
 		switch (choice){
       
@@ -75,13 +90,25 @@ int main() {
 // =================================================
 
 void menu(){
-	
-		printf("1. Show all schedules\n");
-		printf("2. Add schedule\n");
-		printf("3. Edit schedule\n");
-		printf("4. Remove schedule\n");
-		printf("5. Search specific schedule time\n");
-		printf("6. Exit\n");
+		
+	printf("_____________________________________\n");
+	printf("| 1.| Show all schedules             |\n");
+	printf("|---|--------------------------------|\n");
+	printf("| 2.| Add schedule                   |\n");
+	printf("|---|--------------------------------|\n");
+	printf("| 3.| Edit schedule                  |\n");
+	printf("|---|--------------------------------|\n");
+	printf("| 4.| Remove schedule                |\n");
+	printf("|---|--------------------------------|\n");
+	printf("| 5.| Search specific schedule time  |\n");
+	printf("|---|--------------------------------|\n");
+	printf("| 6.| Exit                           |\n");
+	printf("======================================\n");
+	puts("");
+	time();
+	puts("");
+	printf("Choose a number of the feature: ");
+		
 
 }
 
@@ -90,35 +117,43 @@ void menu(){
 // ========================================
 
 void week(){
-
-		printf("1. Monday\n");
-		printf("2. Tuesday\n");
-		printf("3. Wednesay\n");
-		printf("4. Thursday\n");
-		printf("5. Friday\n");
-		printf("6. Saturday\n");
-		printf("7. Sunday\n");
+		
+		printf("_________________\n");
+		printf("| 1.| Monday    |\n");
+		printf("| 2.| Tuesday   |\n");
+		printf("| 3.| Wednesay  |\n");
+		printf("| 4.| Thursday  |\n");
+		printf("| 5.| Friday    |\n");
+		printf("| 6.| Saturday  |\n");
+		printf("| 7.| Sunday    |\n");
+		printf("=================\n");
+		puts("");
 
 }
 
-// ============================================
+// =======================================
 // FILE PROCESSING (SHOWING ALL SCHEDULES)
-// ============================================
+// =======================================
 
 void show(){
 	int c = 0;
 	int count = 1;
 	struct Days dy[50];
+	
+	system("@cls||clear");
+	
 	FILE *f1 = fopen("monday.txt", "r");
 	printf("Monday's Schedule :\n");
+	
 	while(fscanf(f1, "%lld %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
 		double hour = dy[c].hours / 100;
 		int minu = dy[c].hours % 100;
-		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
+		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action); // converting time (from 1835 to 18.35)
 		c++;
 		count++;
 	}
-  printf("\n");
+	
+	printf("\n");
 	count = 1;
     fclose(f1);
     
@@ -131,7 +166,8 @@ void show(){
 		c++;
 		count++;
 	}
-  printf("\n");
+	
+  	printf("\n");
 	count = 1;
     fclose(f2);
     
@@ -144,7 +180,7 @@ void show(){
 		c++;
 		count++;
 	}
-  printf("\n");
+  	printf("\n");
 	count = 1;
     fclose(f3);
     
@@ -157,7 +193,8 @@ void show(){
 		c++;
 		count++;
 	}
-  printf("\n");
+	
+  	printf("\n");
 	count = 1;
     fclose(f4);
     
@@ -170,7 +207,8 @@ void show(){
 		c++;
 		count++;
 	}
-  printf("\n");
+	
+  	printf("\n");
 	count = 1;
     fclose(f5);
     
@@ -182,7 +220,9 @@ void show(){
 		(minu == 0) ? printf("%d. %.2f %s\n", count, hour, dy[c].action) : printf("%d. %.0f.%d %s\n", count, hour, minu, dy[c].action);
 		c++;
 		count++;
-	}printf("\n");
+	}
+	
+	printf("\n");
 	count = 1;
     fclose(f6);
     
@@ -195,9 +235,16 @@ void show(){
 		c++;
 		count++;
 	}
-  printf("\n");
+	
+  	printf("\n");
 	count = 1;
     fclose(f7);
+    
+    char key;
+    printf("Press Enter key to continue!\n");
+    while(getchar()!='\n');
+    getchar();
+    system("@cls||clear");
 }
 
 // ============================================
@@ -207,18 +254,19 @@ void show(){
 void add(){
 	int c = 0;
 	struct Days ds;
-  struct Days dy[50];
+	struct Days dy[50];
   
-  while(1){
-  	int choose;
-      week();
-      printf("Which day would you like to choose (Number)\n");
-      scanf("%d", &choose);
+	while(1){
+	  	int choose;
+	    week();
+	    printf("Which day would you like to choose? (Number)\n");
+		scanf("%d", &choose);
+		system("@cls||clear");
     
     FILE *fadd;
     
     if(choose == 1){
-    	fadd = fopen("monday.txt", "a");
+    	fadd = fopen("week/monday.txt", "a");
 	}
 	else if(choose == 2){
 		fadd = fopen("tuesday.txt", "a");
@@ -243,15 +291,17 @@ void add(){
 		add();
 	}
     	int chs = choose;
-      puts("What time? (ex: 1835 = 6 past 35 PM)");
-			scanf("%lld", &ds.hours);
+      	puts("What time? (ex: 1835 = 6 past 35 PM)");
+		scanf("%lld", &ds.hours);
+		system("@cls||clear"); // Clears previous question
       
 	  	puts("What to do? (ex: study)");
 	  	getchar();
     	scanf("%[^\n]", &ds.action);
+    	system("@cls||clear"); // Clears previous question
     	
-      fprintf(fadd,"%lld %s\n", ds.hours, ds.action); 
-      fclose(fadd);
+      	fprintf(fadd,"%lld %s\n", ds.hours, ds.action); 
+      	fclose(fadd);
     
     FILE *fadd1;
     
@@ -299,6 +349,7 @@ void add(){
     	
     	char jwb[10];
     	scanf("%s", jwb);
+    	system("@cls||clear");
     	char y[] = {"YES"};
     	char n[] = {"NO"};
     	
@@ -331,6 +382,7 @@ void edit(){
     week();
     printf("Which day would you like to choose? (Number)\n");
     scanf("%d", &choose);
+    system("@cls||clear");
     
    	int chs = choose;
   	int c1 = 1;
@@ -380,18 +432,23 @@ void edit(){
       
     puts("Which schedule would you like to change? (Insert schedule number)");
   	scanf("%d", &lin);
+  	system("@cls||clear");
+  	
       
 	puts("What time? (ex: 1835 = 6 past 35 PM)");
 	scanf("%lld", &tmp.hours);
+	system("@cls||clear");
       
 	puts("What to do? (ex: study)");
 	getchar();
 	scanf("%[^\n]", &tmp.action);
+	system("@cls||clear");
     
     while(1){
         char cnm[10];
         puts("Are you sure you want to update? (YES OR NO) (ALL CAPS)");
         scanf("%s", &cnm);
+        system("@cls||clear");
     	int len = strlen(cnm);
 		bool ans = (len % 2 == 0);
 		
@@ -500,6 +557,7 @@ void edit(){
     	
     	char jwb[10];
     	scanf("%s", jwb);
+    	system("@cls||clear");
     	char y[] = {"YES"};
     	char n[] = {"NO"};
     	
@@ -529,6 +587,7 @@ void remove(){
     week();
     printf("Which day would you like to choose? (Number)\n");
     scanf("%d", &choose);
+    system("@cls||clear");
     
     FILE *fp;
     
@@ -576,11 +635,13 @@ void remove(){
   
     puts("Which schedule would you like to remove? (Insert schedule number)");
     scanf("%d", &lin);
+    system("@cls||clear");
         
     while(1){
         char cnm[10];
         puts("Are you sure you want to remove? (YES OR NO) (ALL CAPS)");
         scanf("%s", &cnm);
+        system("@cls||clear");
     	int len = strlen(cnm);
 		bool ans = (len % 2 == 0);
 		
@@ -647,6 +708,7 @@ void remove(){
     	
     	char jwb[10];
     	scanf("%s", jwb);
+    	system("@cls||clear");
     	char y[] = {"YES"};
     	char n[] = {"NO"};
     	
@@ -674,11 +736,13 @@ void search(){
 
 	puts("What time would you like to search in the schedule? (ex: 1835 = 6 past 35 PM)");
 	scanf("%lld", &num);
+	system("@cls||clear");
 	
 	int choose;
 	week();
     printf("Which day would you like to choose? (Number)\n");
     scanf("%d", &choose);
+    system("@cls||clear");
     
     FILE *fp;
     
@@ -728,6 +792,7 @@ void search(){
     	
     	char jwb[10];
     	scanf("%s", jwb);
+    	system("@cls||clear");
     	char y[] = {"YES"};
     	char n[] = {"NO"};
     	
@@ -750,6 +815,7 @@ void search(){
     	
     	char jwb[10];
     	scanf("%s", jwb);
+    	system("@cls||clear");
     	char y[] = {"YES"};
     	char n[] = {"NO"};
     	
@@ -758,7 +824,6 @@ void search(){
     		search();
 		}
 		else if (strcmp(jwb, n) == 0){
-			main();
 		}
 		else{
 			puts("Invalid input");
@@ -869,16 +934,12 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
 	
     while(idxL < sizeL && idxR < sizeR){
         if(arrL[idxL].hours < arrR[idxR].hours){
-        	//printf("arrL %d\n", arrL[idxL].age);
             dy[idx] = arrL[idxL];
-            //printf("swa %d\n", swa[idx].age);
             idx++;
             idxL++;
         }
         else{
-        	//printf("arrR %d\n", arrR[idxR].age);
             dy[idx] = arrR[idxR];
-            //printf("swa %d\n", swa[idx].age);
             idx++;
             idxR++;
         }
@@ -921,10 +982,18 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
 	}
 	
 	for (int k = 0; k < count; k++){
-		//printf("%d\n", swa[k]);
 		fprintf(fs, "%d %s\n", dy[k].hours, dy[k].action);
 	}
 	fclose(fs);
 	fclose(fm);
 	
+}
+
+void time(){
+ 
+    time_t x;
+ 
+    time(&x);
+ 
+    printf("Today is %s", ctime(&x));
 }
