@@ -4,7 +4,7 @@
 #include <time.h>
 #include <ctype.h>
 
-char dayz[][50] = {"week/monday.txt", "week/tuesday.txt", "week/wednesday.txt", "week/thursday.txt", "week/friday.txt", "week/saturday.txt", "week/sunday.txt"};
+char dayz[][50] = {"week/monday.txt", "week/tuesday.txt", "week/wednesday.txt", "week/thursday.txt", "week/friday.txt", "week/saturday.txt", "week/sunday.txt"}; // Global variable stores all test file in the week folder
 
 // =========
 // FUNCTIONS
@@ -381,8 +381,10 @@ void edit(){
 			fp = fopen(dayz[choose - 1], "r+");
 		}
 		
-		
-		
+		else{
+	      	printf("Invalid input\n");
+			edit();
+		} 
 		  
 		while(fscanf(fp, "%lf %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){ // Getting all schedules from txt file (each schedule is within a single line)
 		
@@ -484,6 +486,7 @@ void edit(){
 // =======================================================
 
 void remove(){
+	
 	int choose;
   
 	while(1){
@@ -498,6 +501,13 @@ void remove(){
 	    if(choose > 0 && choose < 8){
 	    	fp = fopen(dayz[choose - 1], "r");
 		}
+		
+		else{
+	      	printf("Invalid input\n");
+			remove();
+		}
+		
+		
 		
 	  	int c1 = 1;
 	    int c = 1;
@@ -581,6 +591,11 @@ void search(){
     
     if(choose > 0 && choose < 8){
     	fp = fopen(dayz[choose - 1], "r");
+	}
+	
+	else{
+	    printf("Invalid input\n");
+		search();
 	}
     
     int c = 1;
@@ -747,6 +762,10 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
 	fclose(fm);
 }
 
+// ====================
+// CONFIRMATION SYSTEMS
+// ====================
+
 void ask(int x){
 	
 	while(1){
@@ -863,6 +882,10 @@ void confirm(int x){
 		}
 	}
 }
+
+// =================
+// DISPLAYS REALTIME
+// =================
 
 void time(){
  
