@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
+
+char dayz[][50] = {"week/monday.txt", "week/tuesday.txt", "week/wednesday.txt", "week/thursday.txt", "week/friday.txt", "week/saturday.txt", "week/sunday.txt"};
 
 // =========
 // FUNCTIONS
@@ -18,6 +21,8 @@ int binary(struct Days ds[], int x, int target);
 void split(struct Days dy[], int left, int right, int ch);
 void sort(struct Days dy[], int x, int ch);
 void merge(struct Days dy[], int left, int mid, int right, int ch);
+void ask(int x);
+void confirm(int x);
 void time();
 
 // ==========================================
@@ -142,7 +147,7 @@ void show(){
 	
 	system("@cls||clear");
 	
-	FILE *f1 = fopen("week/monday.txt", "r");
+	FILE *f1 = fopen(dayz[0], "r");
 	printf("===============================\n");
 	printf("Monday's Schedule :\n");
 	
@@ -157,7 +162,7 @@ void show(){
 	count = 1;
     fclose(f1);
     
-    FILE *f2 = fopen("week/tuesday.txt", "r");
+    FILE *f2 = fopen(dayz[1], "r");
     printf("____________________\n");
 	printf("Tuesday's Schedule :\n");
 	
@@ -172,7 +177,7 @@ void show(){
 	count = 1;
     fclose(f2);
     
-    FILE *f3 = fopen("week/wednesday.txt", "r");
+    FILE *f3 = fopen(dayz[2], "r");
     printf("______________________\n");
 	printf("Wednesday's Schedule :\n");
 	
@@ -186,7 +191,7 @@ void show(){
 	count = 1;
     fclose(f3);
     
-    FILE *f4 = fopen("week/thursday.txt", "r");
+    FILE *f4 = fopen(dayz[3], "r");
     printf("_____________________\n");
 	printf("Thursday's Schedule :\n");
 	
@@ -201,7 +206,7 @@ void show(){
 	count = 1;
     fclose(f4);
     
-    FILE *f5 = fopen("week/friday.txt", "r");
+    FILE *f5 = fopen(dayz[4], "r");
     printf("___________________\n");
 	printf("Friday's Schedule :\n");
 	
@@ -216,7 +221,7 @@ void show(){
 	count = 1;
     fclose(f5);
     
-    FILE *f6 = fopen("week/saturday.txt", "r");
+    FILE *f6 = fopen(dayz[5], "r");
     printf("_____________________\n");
 	printf("Saturday's Schedule :\n");
 	
@@ -231,7 +236,7 @@ void show(){
 	count = 1;
     fclose(f6);
     
-	FILE *f7 = fopen("week/sunday.txt", "r");
+	FILE *f7 = fopen(dayz[6], "r");
 	printf("___________________\n");
 	printf("Sunday's Schedule :\n");
 	
@@ -269,36 +274,12 @@ void add(){
 	    printf("Which day would you like to choose? (Number)\n");
 		scanf("%d", &choose); // Inputs user's chosen day
 		system("@cls||clear");
-    
-	    FILE *fadd;
-	    
-	    if(choose == 1){
-	    	fadd = fopen("week/monday.txt", "a");
+    	
+    	FILE *fadd;
+    	
+    	if (choose > 0 && choose < 8){
+	    	fadd = fopen(dayz[choose - 1], "a");
 		}
-		
-		else if(choose == 2){
-			fadd = fopen("week/tuesday.txt", "a");
-		} 
-		
-		else if(choose == 3){
-			fadd = fopen("week/wednesday.txt", "a");
-		} 
-		
-		else if(choose == 4){
-			fadd = fopen("week/thursday.txt", "a");
-		} 
-		
-		else if(choose == 5){
-			fadd = fopen("week/friday.txt", "a");
-		} 
-		
-		else if(choose == 6){
-			fadd = fopen("week/saturday.txt", "a");
-		} 
-		
-		else if(choose == 7){
-			fadd = fopen("week/sunday.txt", "a");
-		} 
 		
 		else{
 	      	printf("Invalid input\n");
@@ -322,42 +303,17 @@ void add(){
 	    FILE *fadd1;
 	    FILE *fadd2;
 	    
-	    if(choose == 1){
-			fadd1 = fopen("week/monday.txt", "a+");
-			fadd2 = fopen("week/monday.txt", "r");
+	    if(choose > 0 && choose < 8){
+	    	fadd1 = fopen(dayz[choose - 1], "a+");
+	    	fadd2 = fopen(dayz[choose - 1], "r");
 		} 
-	    else if(choose == 2){
-			fadd1 = fopen("week/tuesday.txt", "a+");
-			fadd2 = fopen("week/tuesday.txt", "r");
-		} 
-	    else if(choose == 3){
-			fadd1 = fopen("week/wednesday.txt", "a+");
-			fadd2 = fopen("week/wednesday.txt", "r");
-				
-		} 
-	    else if(choose == 4){
-			fadd1 = fopen("week/thursday.txt", "a+");
-			fadd2 = fopen("week/thursday.txt", "r");
-				
-		} 
-	    else if(choose == 5){
-			fadd1 = fopen("week/friday.txt", "a+");
-			fadd2 = fopen("week/friday.txt", "r");
-		} 
-	    else if(choose == 6){
-			fadd1 = fopen("week/saturday.txt", "a+");
-			fadd2 = fopen("week/saturday.txt", "r");
-		} 
-	    else if(choose == 7){
-			fadd1 = fopen("week/sunday.txt", "a+");
-			fadd2 = fopen("week/sunday.txt", "r");
-		} 
+		
 		else{
 	      	printf("Invalid input\n");
 			add();
 		} 
 		  
-    	while(fscanf(fadd2, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
+    	while(fscanf(fadd1, "%lf %[^\n]\n", &dy[c].hours, dy[c].action) != EOF){
 	        c++;
 	    }
 	      
@@ -374,39 +330,22 @@ void add(){
 	      	
 	    puts("Here is your new schedule :\n"); // Displays updated schedule
 	    
-	  	while(fscanf(fadd1, "%lf %[^\n]\n", &dy[stuff].hours, dy[stuff].action) != EOF){
+	  	while(fscanf(fadd2, "%lf %[^\n]\n", &dy[stuff].hours, dy[stuff].action) != EOF){
 	  		
 	  		printf("%d. %.2f %s\n", c2, dy[stuff].hours, dy[stuff].action); // Displays updated schedule
 	    	stuff++;
 	    	c2++;
 	    }
 	    
-	      
+	    fclose(fadd2);
 	    fclose(fadd1);
 			 
 		puts("");
-		 
-        puts("Would you like to add again? (YES or NO) (ALL CAPS)");
-    	
-    	char jwb[10];
-    	scanf("%s", jwb);
-    	system("@cls||clear");
-    	char y[] = {"YES"};
-    	char n[] = {"NO"};
-    	
-    	
-    	if (strcmp(jwb, y) == 0){
-    		add();
-		}
+	    
+	    int chos = 1;
+	    
+		ask(chos); // Asks user if they want to add another schedule
 		
-		else if (strcmp(jwb, n) == 0){
-			break;
-		}
-		
-		else{
-			puts("Invalid input");
-		}
-
       	break;
     }
     
@@ -438,33 +377,11 @@ void edit(){
 		
 		FILE *fp;
 		
-		if(choose == 1){
-			fp = fopen("week/monday.txt", "r");
+		if(choose > 0 && choose < 8){
+			fp = fopen(dayz[choose - 1], "r+");
 		}
 		
-		else if(choose == 2){
-			fp = fopen("week/tuesday.txt", "r+");
-		}
 		
-		else if(choose == 3){
-			fp = fopen("week/wednesday.txt", "r+");
-		}
-		
-		else if(choose == 4){
-			fp = fopen("week/thursday.txt", "r+");
-		}
-		
-		else if(choose == 5){
-			fp = fopen("week/friday.txt", "r+");
-		}
-		
-		else if(choose == 6){
-			fp = fopen("week/saturday.txt", "r+");
-		}
-		
-		else if(choose == 7){
-			fp = fopen("week/sunday.txt", "r+");
-		}
 		
 		  
 		while(fscanf(fp, "%lf %[^\n]\n", &ds[counter].hours, ds[counter].action) != EOF){ // Getting all schedules from txt file (each schedule is within a single line)
@@ -490,60 +407,16 @@ void edit(){
 		
 		puts("");
     
-	    while(1){
-	    	
-	        char cnm[10];
-	        puts("Are you sure you want to update? (YES OR NO) (ALL CAPS)"); // Confirms user's changes within the schedule
-	        scanf("%s", &cnm); // Inputs user's confirmation
-	        system("@cls||clear");
-	    	int len = strlen(cnm);
-			bool ans = (len % 2 == 0);
-			
-			
-	    	if (ans == 0){
-	    		break;
-			}
+		int cons = 1;
 		
-			else if (ans == 1){
-				main();
-				break;
-			}
-			
-			else{
-				continue;
-			}
-		}
+		confirm(cons); // Asks user's confirmation to update schedule
     
     	puts("Here is your new schedule :\n"); // Displays updated schedule
     
     	FILE *fc;
     
-	    if(choose == 1){
-	    	fc = fopen("week/monday.txt", "w+");
-		}
-	
-		else if(choose == 2){
-	    	fc = fopen("week/tuesday.txt", "w+");
-		}
-		
-		else if(choose == 3){
-	    	fc = fopen("week/wednesday.txt", "w+");
-		}
-		
-		else if(choose == 4){
-	    	fc = fopen("week/thursday.txt", "w+");
-		}
-		
-		else if(choose == 5){
-	    	fc = fopen("week/friday.txt", "w+");
-		}
-		
-		else if(choose == 6){
-	    	fc = fopen("week/saturday.txt", "w+");
-		}
-		
-		else if(choose == 7){
-	    	fc = fopen("week/sunday.txt", "w+");
+	    if(choose > 0 && choose < 8){
+	    	fc = fopen(dayz[choose - 1], "w+");
 		}
 		
 	   	for (int i = 1; i <= counter; i++){
@@ -564,40 +437,11 @@ void edit(){
 	    FILE *fa;
 	    FILE *ff;
 		
-		if(choose == 1){
-			fa = fopen("week/monday.txt", "a+");
-			ff = fopen("week/monday.txt", "r");
+		if(choose > 0 && choose < 8){
+			fa = fopen(dayz[choose - 1], "a+");
+			ff = fopen(dayz[choose - 1], "r");
 		}
 		
-		else if(choose == 2){
-			fa = fopen("week/tuesday.txt", "a+");
-			ff = fopen("week/tuesday.txt", "r");
-		}
-		
-		else if(choose == 3){
-			fa = fopen("week/wednesday.txt", "a+");
-			ff = fopen("week/wednesday.txt", "r");
-		}
-		
-		else if(choose == 4){
-			fa = fopen("week/thursday.txt", "a+");
-			ff = fopen("week/wednesday.txt", "r");
-		}
-		
-		else if(choose == 5){
-			fa = fopen("week/friday.txt", "a+");
-			ff = fopen("week/wednesday.txt", "r");
-		}
-		
-		else if(choose == 6){
-			fa = fopen("week/saturday.txt", "a+");
-			ff = fopen("week/wednesday.txt", "r");
-		}
-		
-		else if(choose == 7){
-			fa = fopen("week/sunday.txt", "a+");
-			ff = fopen("week/wednesday.txt", "r");
-		}
         
       	int count = 0;
       	while(fscanf(fa, "%lf %[^\n]\n", &dy[count].hours, dy[count].action) != EOF){
@@ -627,28 +471,10 @@ void edit(){
       	fclose(fa);
       	
       	puts("");
-      	
-        puts("Would you like to edit again? (YES or NO) (ALL CAPS)");
-    	
-    	char jwb[10];
-    	scanf("%s", jwb);
-    	system("@cls||clear");
-    	char y[] = {"YES"};
-    	char n[] = {"NO"};
-    	
-    	
-    	if (strcmp(jwb, y) == 0){
-    		edit();
-		}
-		
-		else if (strcmp(jwb, n) == 0){
-			break;
-		}
-		
-		else{
-			puts("Invalid input");
-		}
-
+	    
+	    int chos = 2; 
+	    
+		ask(chos); // Asks user if they want to edit another schedule
         break;
     }
 }
@@ -669,32 +495,8 @@ void remove(){
 	    
 	    FILE *fp;
 	    
-	    if(choose == 1){
-	    	fp = fopen("week/monday.txt", "r");
-		}
-		
-		else if(choose == 2){
-	    	fp = fopen("week/tuesday.txt", "r");
-		}
-		
-		else if(choose == 3){
-	    	fp = fopen("week/wednesday.txt", "r");
-		}
-		
-		else if(choose == 4){
-	    	fp = fopen("week/thursday.txt", "r");
-		}
-		
-		else if(choose == 5){
-	    	fp = fopen("week/friday.txt", "r");
-		}
-		
-		else if(choose == 6){
-	    	fp = fopen("week/saturday.txt", "r");
-		}
-		
-		else if(choose == 7){
-	    	fp = fopen("week/sunday.txt", "r");
+	    if(choose > 0 && choose < 8){
+	    	fp = fopen(dayz[choose - 1], "r");
 		}
 		
 	  	int c1 = 1;
@@ -717,58 +519,16 @@ void remove(){
 	    
 	    puts("");
 	    
-	    while(1){
-	    	
-	        char cnm[10];
-	        puts("Are you sure you want to remove? (YES OR NO) (ALL CAPS)"); // Confirms user's changes within the schedule
-	        scanf("%s", &cnm); // Inputs user's confirmation
-	        system("@cls||clear");
-	    	int len = strlen(cnm);
-			bool ans = (len % 2 == 0);
-			
-			
-	    	if (ans == 0){
-	    		break;
-			}
-			else if (ans == 1){
-				main();
-				break;
-			}
-			else{
-				continue;
-			}
-		}
+		int cons = 2;
+		
+		confirm(cons); // Asks user's confirmation to remove schedule
 	        
 	    puts("Here is your new schedule :\n"); // Displays updated schedule
 	    
 	    FILE *fc;
 	    
-	    if(choose == 1){
-	    	fc = fopen("week/monday.txt", "w+");
-		}
-		
-		else if(choose == 2){
-	    	fc = fopen("week/tuesday.txt", "w+");
-		}
-		
-		else if(choose == 3){
-	    	fc = fopen("week/wednesday.txt", "w+");
-		}
-		
-		else if(choose == 4){
-	    	fc = fopen("week/thursday.txt", "w+");
-		}
-		
-		else if(choose == 5){
-	    	fc = fopen("week/friday.txt", "w+");
-		}
-		
-		else if(choose == 6){
-	    	fc = fopen("week/saturday.txt", "w+");
-		}
-		
-		else if(choose == 7){
-	    	fc = fopen("week/sunday.txt", "w+");
+	    if(choose > 0 && choose < 8){
+	    	fc = fopen(dayz[choose - 1], "w+");
 		}
 	
 		for (int i = 1; i <= counter; i++){
@@ -786,28 +546,11 @@ void remove(){
       	fclose(fp);
     	fclose(fc);
         
-        printf("\n");
-        
-        puts("Would you like to remove again? (YES or NO) (ALL CAPS)");
-    	
-    	char jwb[10];
-    	scanf("%s", jwb);
-    	system("@cls||clear");
-    	char y[] = {"YES"};
-    	char n[] = {"NO"};
-    	
-    	
-    	if (strcmp(jwb, y) == 0){
-    		remove();
-		}
-		
-		else if (strcmp(jwb, n) == 0){
-			break;
-		}
-		
-		else{
-			puts("Invalid input");
-		}
+        puts("");
+	    
+	    int chos = 3;
+	    
+		ask(chos); // Asks user if they want to remove another schedule
 		
         break;
     }
@@ -826,7 +569,7 @@ void search(){
 	scanf("%lf", &num); // Inputs a specific time of schedule to be searched
 	system("@cls||clear");
   
-	trg = num*100;
+	trg = num*100.01;
 	
 	int choose;
 	week();
@@ -836,32 +579,8 @@ void search(){
     
     FILE *fp;
     
-    if(choose == 1){
-    	fp = fopen("week/monday.txt", "r");
-	}
-	
-	else if(choose == 2){
-    	fp = fopen("week/tuesday.txt", "r");
-	}
-	
-	else if(choose == 3){
-    	fp = fopen("week/wednesday.txt", "r");
-	}
-	
-	else if(choose == 4){
-    	fp = fopen("week/thursday.txt", "r");
-	}
-	
-	else if(choose == 5){
-    	fp = fopen("week/friday.txt", "r");
-	}
-	
-	else if(choose == 6){
-    	fp = fopen("week/saturday.txt", "r");
-	}
-	
-	else if(choose == 7){
-    	fp = fopen("week/sunday.txt", "r");
+    if(choose > 0 && choose < 8){
+    	fp = fopen(dayz[choose - 1], "r");
 	}
     
     int c = 1;
@@ -880,25 +599,13 @@ void search(){
     if (binary(ds, c, trg) == -1){ // Condition if there is no match
     	puts("No schedule at this time in this day\n");
     	
-    	puts("Would you like to search again? (YES or NO) (ALL CAPS)");
-    	
-    	char jwb[10];
-    	scanf("%s", jwb);
-    	system("@cls||clear");
-    	char y[] = {"YES"};
-    	char n[] = {"NO"};
+    	puts("");
+	    
+	    int chos = 4; // Asks user if they want to search another schedule
+	    
+		ask(chos);
     	
     	
-    	if (strcmp(jwb, y) == 0){
-    		search();
-		}
-		
-		else if (strcmp(jwb, n) == 0){
-		}
-		
-		else{
-			puts("Invalid input");
-		}
 	}
 	
 	else{ // Condition if there is a match
@@ -908,25 +615,9 @@ void search(){
 	    
 	    puts("");
 	    
-    	puts("Would you like to search again? (YES or NO) (ALL CAPS)");
-    	
-    	char jwb[10];
-    	scanf("%s", jwb);
-    	system("@cls||clear");
-    	char y[] = {"YES"};
-    	char n[] = {"NO"};
-    	
-    	
-    	if (strcmp(jwb, y) == 0){
-    		search();
-		}
-		
-		else if (strcmp(jwb, n) == 0){
-		}
-		
-		else{
-			puts("Invalid input");
-		}
+	    int chos = 4;
+	    
+		ask(chos); // Asks user if they want to search another schedule
 	}
     
 }
@@ -936,18 +627,22 @@ void search(){
 // ====================
 
 int binary(struct Days ds[50], int x, int target){
+	
 	int min = 0;
 	int max = x - 1;
+	
 	while(min <= max){
 		int mid = (min + max) / 2;
 		
-		if (target < (ds[mid].hours*100)){
+		if (target < (int)(ds[mid].hours*100.01)){
 			max = mid - 1;
 		}
-		else if (target > (ds[mid].hours*100)){
+		
+		else if (target > (int)(ds[mid].hours*100.01)){
 			min = mid + 1;
 		}
-		else if (target == (ds[mid].hours*100)){
+		
+		else if (target == (int)(ds[mid].hours*100.01)){
 			return mid;
 		}
 	}
@@ -985,26 +680,8 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
 	
 	FILE *fm;
 	
-	if (ch == 1){
-		fm = fopen("week/monday.txt", "r");
-	}
-	else if (ch == 2){
-		fm = fopen("week/tuesday.txt", "r");
-	}
-	else if (ch == 3){
-		fm = fopen("week/wednesday.txt", "r");
-	}
-	else if (ch == 4){
-		fm = fopen("week/thursday.txt", "r");
-	}
-	else if (ch == 5){
-		fm = fopen("week/friday.txt", "r");
-	}
-	else if (ch == 6){
-		fm = fopen("week/saturday.txt", "r");
-	}
-	else if (ch == 7){
-		fm = fopen("week/sunday.txt", "r");
+	if (ch > 0 && ch < 8){
+		fm = fopen(dayz[ch - 1], "r");
 	}
 	
 	int count = 0;
@@ -1058,33 +735,133 @@ void merge(struct Days dy[50], int left, int mid, int right, int ch){
     
     FILE *fs;
     
-	if (ch == 1){
-		fs = fopen("week/monday.txt", "w+");
+	if (ch > 0 && ch < 8){
+		fs = fopen(dayz[ch - 1], "w+");
 	}
-	else if (ch == 2){
-		fs = fopen("week/tuesday.txt", "w+");
-	}
-	else if (ch == 3){
-		fs = fopen("week/wednesday.txt", "w+");
-	}
-	else if (ch == 4){
-		fs = fopen("week/thursday.txt", "w+");
-	}
-	else if (ch == 5){
-		fs = fopen("week/friday.txt", "w+");
-	}
-	else if (ch == 6){
-		fs = fopen("week/saturday.txt", "w+");
-	}
-	else if (ch == 7){
-		fs = fopen("week/sunday.txt", "w+");
-	}
+
 	
 	for (int k = 0; k < count; k++){
 		fprintf(fs, "%lf %s\n", dy[k].hours, dy[k].action);
 	}
 	fclose(fs);
 	fclose(fm);
+}
+
+void ask(int x){
+	
+	while(1){
+		
+		if(x == 1){
+        	puts("Would you like to add again?");
+    	}
+    	
+    	if(x == 2){
+        	puts("Would you like to edit again?");
+    	}
+    	
+    	if(x == 3){
+        	puts("Would you like to remove again?");
+    	}
+    	
+    	if(x == 4){
+        	puts("Would you like to search again?");
+    	}
+    	
+        puts("(Yes or No)");
+    	
+    	char *jwb;
+		char y[] = {"yes"};
+		char n[] = {"no"};
+    	
+    	scanf("%s", jwb);
+    	
+    	int len = strlen(jwb);
+    	
+    	for(int g = 0; g < len; g++){
+    		jwb[g] = tolower((unsigned char) jwb[g]); // Changes user's input to lower characters
+		}
+    	
+    	
+    	system("@cls||clear");
+    	
+    	if (strcmp(jwb, y) == 0){
+    		if(x == 1){
+    			add();
+    			break;
+			}
+			else if(x == 2){
+    			edit();
+    			break;
+			}
+			else if(x == 3){
+    			remove();
+    			break;
+			}
+			else if(x == 4){
+    			search();
+    			break;
+			}
+		}
+		
+		else if (strcmp(jwb, n) == 0){
+			break;
+		}
+		
+		else{
+			puts("Invalid input\n");
+			continue;
+		}
+	}
+}
+
+void confirm(int x){
+	
+	while(1){
+		
+		if(x == 1){
+        	puts("Are you sure you want to update?");
+    	}
+    	
+    	if(x == 2){
+        	puts("Are you sure you want to remove?");
+    	}	
+    	
+        puts("(Yes or No)");
+    	
+    	char *jwb;
+		char y[] = {"yes"};
+		char n[] = {"no"};
+    	
+    	scanf("%s", jwb);
+    	
+    	int len = strlen(jwb);
+    	
+    	for(int g = 0; g < len; g++){
+    		jwb[g] = tolower((unsigned char) jwb[g]); // Changes user's input to lower characters
+		}
+    	
+    	
+    	system("@cls||clear");
+    	
+    	if (strcmp(jwb, y) == 0){
+			if(x == 1){
+    			break;
+			}
+			else if(x == 2){
+    			break;
+			}
+		}
+		
+		else if (strcmp(jwb, n) == 0){
+			main();
+			break;
+		}
+		
+		else{
+			puts("Invalid input\n");
+			continue;
+		}
+	}
 }
 
 void time(){
