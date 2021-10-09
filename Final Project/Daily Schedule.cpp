@@ -42,7 +42,7 @@ int main() {
 
 	int choice;
 	
-	do{
+	while(1){
     
 	    char string[100000];
 		
@@ -84,9 +84,15 @@ int main() {
 				search(); // Search a specific schedule with the time
 				break;
       		}
+      		case 6:{
+      			printf("=================================\n");
+      			printf("Thank you for using this software\n");
+      			printf("=================================\n");
+      			exit(0); // Exits the program
+				break;
+			}
     	}
   	}	
-	while(choice != 6);
 }
 
 // =================================================
@@ -130,6 +136,7 @@ void week(){
 	printf("| 5.| Friday    |\n");
 	printf("| 6.| Saturday  |\n");
 	printf("| 7.| Sunday    |\n");
+	printf("| 0.| Back      |\n");
 	printf("=================\n");
 	puts("");
 
@@ -281,12 +288,18 @@ void add(){
 	    	fadd = fopen(dayz[choose - 1], "a");
 		}
 		
+		else if (choose == 0){
+			main();
+			break;
+		}
+		
 		else{
 	      	printf("Invalid input\n");
 			add();
 		} 
 		
     	int chs = choose;
+    	puts("================================================================================\n");
       	puts("What time? (ex: 6.35 = 6 past 35 AM, 18.35 = 6 past 35 PM)");
 		scanf("%lf", &ds.hours); // Inputs user's activity time
       	
@@ -327,7 +340,8 @@ void add(){
 	      
 	    int stuff = 0;
 	    int c2 = 1;
-	      	
+	    
+	    puts("================================================================================\n");
 	    puts("Here is your new schedule :\n"); // Displays updated schedule
 	    
 	  	while(fscanf(fadd2, "%lf %[^\n]\n", &dy[stuff].hours, dy[stuff].action) != EOF){
@@ -381,6 +395,11 @@ void edit(){
 			fp = fopen(dayz[choose - 1], "r+");
 		}
 		
+		else if (choose == 0){
+			main();
+			break;
+		}
+		
 		else{
 	      	printf("Invalid input\n");
 			edit();
@@ -392,12 +411,12 @@ void edit(){
 			counter++;
 			c++;
 		}
-		  
+		puts("================================================================================\n");
 		puts("Which schedule would you like to change? (Insert schedule number)");
 		scanf("%d", &lin); // Inputs user's choice of schedule to be changed
 		system("@cls||clear");
 		
-		  
+		puts("================================================================================\n");
 		puts("What time? (ex: 6.35 = 6 past 35 AM, 18.35 = 6 past 35 PM)");
 		scanf("%lf", &tmp.hours); // Inputs user's updated activity time
 		
@@ -412,7 +431,8 @@ void edit(){
 		int cons = 1;
 		
 		confirm(cons); // Asks user's confirmation to update schedule
-    
+    	
+    	puts("================================================================================\n");
     	puts("Here is your new schedule :\n"); // Displays updated schedule
     
     	FILE *fc;
@@ -502,6 +522,11 @@ void remove(){
 	    	fp = fopen(dayz[choose - 1], "r");
 		}
 		
+		else if (choose == 0){
+			main();
+			break;
+		}
+		
 		else{
 	      	printf("Invalid input\n");
 			remove();
@@ -523,7 +548,8 @@ void remove(){
 	    	counter++;
 	    	c++;
 		}
-	  
+		
+		puts("================================================================================\n");
 	    puts("Which schedule would you like to remove? (Insert schedule number)");
 	    scanf("%d", &lin); // Inputs user's choice of schedule to be removed
 	    
@@ -532,7 +558,8 @@ void remove(){
 		int cons = 2;
 		
 		confirm(cons); // Asks user's confirmation to remove schedule
-	        
+	    
+	    puts("================================================================================\n");
 	    puts("Here is your new schedule :\n"); // Displays updated schedule
 	    
 	    FILE *fc;
@@ -575,6 +602,7 @@ void search(){
   	int trg;
 	double num;
 
+	puts("================================================================================\n");
 	puts("What time would you like to search in the schedule? (ex: 1835 = 6 past 35 PM)");
 	scanf("%lf", &num); // Inputs a specific time of schedule to be searched
 	system("@cls||clear");
@@ -591,6 +619,10 @@ void search(){
     
     if(choose > 0 && choose < 8){
     	fp = fopen(dayz[choose - 1], "r");
+	}
+	
+	else if (choose == 0){
+		main();
 	}
 	
 	else{
@@ -612,6 +644,7 @@ void search(){
     int idx = binary(ds, c, trg);
     
     if (binary(ds, c, trg) == -1){ // Condition if there is no match
+    	puts("================================================================================\n");
     	puts("No schedule at this time in this day\n");
     	
     	puts("");
@@ -624,6 +657,7 @@ void search(){
 	}
 	
 	else{ // Condition if there is a match
+		puts("================================================================================\n");
 	    puts("Here is the schedule:");
 	    puts("");
 	    printf("%s\n", ds[idx].action);
@@ -863,12 +897,7 @@ void confirm(int x){
     	system("@cls||clear");
     	
     	if (strcmp(jwb, y) == 0){
-			if(x == 1){
-    			break;
-			}
-			else if(x == 2){
-    			break;
-			}
+			break;
 		}
 		
 		else if (strcmp(jwb, n) == 0){
